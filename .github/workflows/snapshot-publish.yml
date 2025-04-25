@@ -1,0 +1,33 @@
+name: Publish Snapshot
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Run nightly at midnight UTC
+    - cron: '0 0 * * *'
+
+jobs:
+  publish-snapshot:
+    # Only run on main branch in the original repository, not forks
+    if: github.repository == 'dremio/iceberg-auth-manager' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+          
+      - name: Build with Gradle
+        run: ./gradlew clean build
+        
+      - name: Publish to Maven Repository
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+        run: ./gradlew publish

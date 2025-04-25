@@ -22,7 +22,7 @@ plugins {
 }
 
 dependencies {
-  implementation(enforcedPlatform(libs.iceberg.bom))
+  implementation(platform(libs.iceberg.bom))
   implementation("org.apache.iceberg:iceberg-api")
   implementation("org.apache.iceberg:iceberg-core")
 

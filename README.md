@@ -32,6 +32,42 @@ with Iceberg REST, allowing for easier migration from the latter to the former.
 To get started with Dremio AuthManager for Apache Iceberg, you can follow the instructions in the
 [documentation](./docs).
 
+## Maven Artifacts
+
+Maven artifacts are published to the Dremio Free Maven repository. To use them in your project:
+
+```xml
+<!-- Add Dremio repository -->
+<repositories>
+  <repository>
+    <id>dremio-free</id>
+    <url>https://maven.dremio.com/free/</url>
+  </repository>
+</repositories>
+
+<!-- Add the OAuth2 dependency -->
+<dependency>
+  <groupId>com.dremio.iceberg.authmgr</groupId>
+  <artifactId>authmgr-oauth2</artifactId>
+  <version>0.0.2</version>
+</dependency>
+```
+
+For Gradle:
+
+```kotlin
+repositories {
+  mavenCentral()
+  maven {
+    url = uri("https://maven.dremio.com/free/")
+  }
+}
+
+dependencies {
+  implementation("com.dremio.iceberg.authmgr:authmgr-oauth2:0.0.2")
+}
+```
+
 ## License
 
 Copyright (C) 2025 Dremio Corporation
