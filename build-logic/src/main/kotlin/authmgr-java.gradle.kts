@@ -29,6 +29,7 @@ plugins {
   id("com.diffplug.spotless")
   id("jacoco-report-aggregation")
   id("net.ltgt.errorprone")
+  id("authmgr-maven-publish")
 }
 
 tasks.withType(JavaCompile::class.java).configureEach {
