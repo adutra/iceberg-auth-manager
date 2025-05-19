@@ -38,6 +38,23 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+
+      - name: Validate Inputs
+        run: |
+          if [[ "${{ github.event.inputs.releaseVersion }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Valid release version: ${{ github.event.inputs.releaseVersion }}"
+          else
+            echo "Invalid release version format. Expected format: x.y.z"
+            exit 1
+          fi
+
+          if [[ "${{ github.event.inputs.nextVersion }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+-SNAPSHOT$ ]]; then
+            echo "Valid next development version: ${{ github.event.inputs.nextVersion }}"
+          else
+            echo "Invalid next development version format. Expected format: x.y.z-SNAPSHOT"
+            exit 1
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
