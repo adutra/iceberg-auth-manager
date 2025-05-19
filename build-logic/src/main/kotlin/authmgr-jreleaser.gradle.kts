@@ -25,6 +25,7 @@ jreleaser {
 
   gitRootSearch.set(true)
 
+  // FIXME remove
   dryrun.set(true)
 
   project {
