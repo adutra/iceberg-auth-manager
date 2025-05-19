@@ -93,6 +93,7 @@ jreleaser {
       }
     }
   }
+
   release {
     github {
       repoOwner.set("dremio")
@@ -124,7 +125,6 @@ jreleaser {
         preset.set("conventional-commits")
         format.set("- {{commitShortHash}} {{commitTitle}}")
         extraProperties.put("categorizeScopes", true)
-        extraProperties.put("space", " ")
         category  {
           key.set( "features")
           labels.set(listOf("feat"))
