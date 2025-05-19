@@ -16,6 +16,7 @@
 
 import org.jreleaser.model.Active
 import org.jreleaser.model.api.common.Apply
+import java.time.LocalDate
 
 plugins {
   id("org.jreleaser")
@@ -30,11 +31,15 @@ jreleaser {
 
   project {
     description.set("Dremio AuthManager for Apache Iceberg")
-    authors.set(listOf("Dremio Corporation"))
+    authors.set(listOf("Dremio"))
     license.set("Apache-2.0")
     links {
       homepage.set("https://github.com/dremio/iceberg-auth-manager")
+      bugTracker = "https://github.com/dremio/iceberg-auth-manager/issues"
     }
+    inceptionYear = "2025"
+    vendor = "Dremio"
+    copyright = "Copyright (c) ${LocalDate.now().year} Dremio"
   }
 
   signing {
@@ -103,7 +108,7 @@ jreleaser {
       tagName.set("authmgr-{{projectVersion}}")
       commitAuthor {
         name.set("AuthManager Release Workflow [bot]")
-        email .set("authmgr-release-workflow-noreply@dremio.co")
+        email .set("authmgr-release-workflow-noreply@dremio.com")
       }
       milestone {
         close.set(true)
