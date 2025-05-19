@@ -61,13 +61,13 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
       
-      - name: Publish to Maven Repository
+      - name: Publish to Maven Central
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: ./gradlew publish
+        run: ./gradlew jreleaserFullRelease
       
       - name: Create Git tag
         run: |

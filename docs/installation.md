@@ -21,18 +21,11 @@ The Dremio AuthManager for Apache Iceberg is available in two ways:
 
 ### Maven Artifacts
 
-Maven artifacts are published to the Dremio Free Maven repository. You can include them directly in your project:
+Maven artifacts are published to Maven Central. You can include them directly in your project:
 
 #### Maven
 
 ```xml
-<repositories>
-  <repository>
-    <id>dremio-free</id>
-    <url>https://maven.dremio.com/free/</url>
-  </repository>
-</repositories>
-
 <dependencies>
   <dependency>
     <groupId>com.dremio.iceberg.authmgr</groupId>
@@ -47,9 +40,6 @@ Maven artifacts are published to the Dremio Free Maven repository. You can inclu
 ```kotlin
 repositories {
   mavenCentral()
-  maven {
-    url = uri("https://maven.dremio.com/free/")
-  }
 }
 
 dependencies {
@@ -77,35 +67,26 @@ To use the Dremio AuthManager for Apache Iceberg with Spark, you can use either 
 
 ### Using Maven Artifacts
 
-The recommended way to use Dremio AuthManager with Spark is through the `--packages` option which will automatically download the artifacts from the Maven repository.
+The recommended way to use Dremio AuthManager with Spark is through the `--packages` option which will automatically download the artifacts from Maven Central.
 
-First, you need to create a `repositories` file to specify the Dremio Maven repository. Create a file named `repositories` with the following content:
-
-```
-dremio-free https://maven.dremio.com/free/
-```
-
-Then, if you are using the `spark-shell`, you can start it with the following command:
+If you are using the `spark-shell`, you can start it with the following command:
 
 ```shell
 spark-shell \
-  --packages org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.9.0,com.dremio.iceberg.authmgr:authmgr-oauth2:0.0.2 \
-  --repositories-file repositories
+  --packages org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.9.0,com.dremio.iceberg.authmgr:authmgr-oauth2:0.0.2
 ```
 
 Similarly, if you are using Spark SQL, you can start it with the following command:
 
 ```shell
 spark-sql \
-  --packages org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.9.0,com.dremio.iceberg.authmgr:authmgr-oauth2:0.0.2 \
-  --repositories-file repositories
+  --packages org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.9.0,com.dremio.iceberg.authmgr:authmgr-oauth2:0.0.2
 ```
 
 You can also add these configurations to your spark-defaults.conf file:
 
 ```
 spark.jars.packages org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.9.0,com.dremio.iceberg.authmgr:authmgr-oauth2:0.0.2
-spark.jars.repositories https://maven.dremio.com/free/
 ```
 
 ### Using Downloaded JAR

@@ -21,7 +21,8 @@ This document describes how to publish Auth Manager artifacts to Maven repositor
 
 AuthManager artifacts are published to the following Maven repositories:
 
-- **Snapshots & Releases**: `https://maven.dremio.com/free/`
+- **Local Maven Repository**: For development and testing purposes
+- **Maven Central**: For public releases
 
 ## Publishing Locally
 
@@ -31,17 +32,11 @@ To publish artifacts to your local Maven repository (`~/.m2/repository`), run:
 ./gradlew publishToMavenLocal
 ```
 
-## Publishing to Dremio Maven Repository
+## Publishing to Maven Central
 
-There are two ways to publish to the Dremio Maven repository:
+The project uses JReleaser to publish artifacts to Maven Central via Sonatype OSSRH.
 
-### 1. Automated Nightly Snapshots
-
-Snapshots are automatically published nightly from the `main` branch. This is handled by a GitHub 
-Action workflow that runs on a cron schedule. You can also manually trigger this workflow from the 
-GitHub Actions tab.
-
-### 2. Manual Release
+### Manual Release
 
 To create a release:
 
@@ -54,7 +49,7 @@ To create a release:
 This will:
 1. Update the version.txt file to the release version
 2. Build and test the project
-3. Sign and publish artifacts to the Dremio Maven repository
+3. Sign and publish artifacts to Maven Central
 4. Create a Git tag for the release
 5. Update the version.txt file to the next development version
 6. Push all changes to GitHub
@@ -63,8 +58,8 @@ This will:
 
 The following secrets must be configured in the GitHub repository settings for publishing to work:
 
-- `MAVEN_USERNAME`: Username for the Dremio Maven repository
-- `MAVEN_PASSWORD`: Password for the Dremio Maven repository
+- `MAVEN_CENTRAL_USERNAME`: Username for Sonatype OSSRH (Maven Central)
+- `MAVEN_CENTRAL_PASSWORD`: Password for Sonatype OSSRH (Maven Central)
 - `GPG_PRIVATE_KEY`: GPG private key for signing release artifacts
 - `GPG_PASSPHRASE`: Passphrase for the GPG private key
 
