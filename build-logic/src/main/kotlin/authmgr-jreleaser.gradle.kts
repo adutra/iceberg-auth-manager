@@ -65,21 +65,28 @@ jreleaser {
         links.set(true)
         skipMergeCommits.set(true)
         formatted.set(Active.ALWAYS)
+        content.set("""
+        # Dremio Iceberg AuthManager {{projectVersionNumber}}
+        {{changelogChanges}}
+        {{changelogContributors}}
+        """.trimIndent())
         preset.set("conventional-commits")
         format.set("- {{commitShortHash}} {{commitTitle}}")
         extraProperties.put("categorizeScopes", true)
+        extraProperties.put("space", " ")
         category  {
           key.set( "features")
           labels.set(listOf("feat"))
-          title.set("🚀 Features")
-          format.set("- {{commitShortHash}} {{commitTitle}}{{#conventionalCommitBody}}\n  {{.}}{{/conventionalCommitBody}}")
+          title.set("🚀 New Features")
+          order.set(10)
+          format.set("- {{commitShortHash}} {{commitTitle}}{{#conventionalCommitBody}}<br>{{.}}{{/conventionalCommitBody}}")
         }
         contributors {
           format.set("- {{contributorName}}{{#contributorUsernameAsLink}} ({{.}}){{/contributorUsernameAsLink}}")
         }
         hide {
+          categories.set(listOf("chore", "build", "tasks", "docs"))
           contributors.set(listOf("[bot]", "renovate-bot", "GitHub"))
-          categories.set(listOf("chore"))
         }
       }
     }
