@@ -42,6 +42,57 @@ jreleaser {
     armored.set(true)
   }
 
+  hooks {
+    condition.set("'{{ Env.CI }}' == true")
+    script {
+      before {
+        filter {
+          includes.set(listOf("session"))
+        }
+        run.set("""
+        echo "### {{command}}" >> ${'$'}GITHUB_STEP_SUMMARY
+        echo "| Step | Outcome |" >> ${'$'}GITHUB_STEP_SUMMARY
+        echo "| ---- | ------- |" >> ${'$'}GITHUB_STEP_SUMMARY
+        """.trimIndent())
+      }
+      success {
+        filter {
+          excludes.set(listOf("session"))
+        }
+        run.set("""
+        echo "| {{event.name}} | :white_check_mark: |" >> ${'$'}GITHUB_STEP_SUMMARY
+        """.trimIndent())
+      }
+      success {
+        filter {
+          includes.set(listOf("session"))
+        }
+        run.set("""
+        echo "" >> ${'$'}GITHUB_STEP_SUMMARY
+        """.trimIndent())
+      }
+      failure {
+        filter {
+          excludes.set(listOf("session"))
+        }
+        run.set("""
+        echo "| {{event.name}} | :x: |" >> ${'$'}GITHUB_STEP_SUMMARY
+        """.trimIndent())
+      }
+      failure {
+        filter {
+          includes.set(listOf("session"))
+        }
+        run.set("""
+        echo "" >> ${'$'}GITHUB_STEP_SUMMARY
+        echo "### Failure" >> ${'$'}GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> ${'$'}GITHUB_STEP_SUMMARY
+        echo "{{event.stacktrace}}\`\`\`" >> ${'$'}GITHUB_STEP_SUMMARY
+        echo "" >> ${'$'}GITHUB_STEP_SUMMARY
+        """.trimIndent())
+      }
+    }
+  }
   release {
     github {
       repoOwner.set("dremio")
