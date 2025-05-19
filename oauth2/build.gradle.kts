@@ -18,6 +18,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
   id("authmgr-java")
+  id("authmgr-maven")
   id("authmgr-shadow-jar")
 }
 

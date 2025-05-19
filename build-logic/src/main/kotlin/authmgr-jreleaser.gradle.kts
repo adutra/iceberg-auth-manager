@@ -18,60 +18,7 @@ import org.jreleaser.model.Active
 import org.jreleaser.model.api.common.Apply
 
 plugins {
-  `maven-publish`
   id("org.jreleaser")
-}
-
-publishing {
-  publications {
-    create<MavenPublication>("staging-maven") {
-
-      // FIXME remove
-      groupId = "dev.alexdutra"
-
-      from(components["java"])
-
-      pom {
-        name = "Auth Manager for Apache Iceberg"
-        description = "Dremio AuthManager for Apache Iceberg is an OAuth2 manager for Apache Iceberg REST. It is a general-purpose implementation that is compatible with any Apache Iceberg REST catalog."
-        url.set("https://github.com/dremio/iceberg-auth-manager")
-        inceptionYear = "2025"
-
-        licenses {
-          license {
-            name = "The Apache License, Version 2.0"
-            url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
-          }
-        }
-
-        developers {
-          developer {
-            id = "dremio"
-            name = "Dremio"
-            email = "oss@dremio.com"
-            organization = "Dremio Corporation"
-            organizationUrl = "https://www.dremio.com"
-          }
-        }
-
-        scm {
-          connection = "scm:git:git://github.com/dremio/iceberg-auth-manager.git"
-          developerConnection = "scm:git:ssh://github.com:dremio/iceberg-auth-manager.git"
-          url = "https://github.com/dremio/iceberg-auth-manager"
-        }
-      }
-
-      // Suppress test fixtures capability warnings
-      suppressPomMetadataWarningsFor("testFixturesApiElements")
-      suppressPomMetadataWarningsFor("testFixturesRuntimeElements")
-    }
-  }
-  repositories {
-    maven {
-      name = "localStaging"
-      url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
-    }
-  }
 }
 
 jreleaser {
@@ -88,7 +35,7 @@ jreleaser {
       homepage.set("https://github.com/dremio/iceberg-auth-manager")
     }
   }
-  
+
   signing {
     active.set(Active.ALWAYS)
     verify.set(false) // requires the GPG public key to be set up
@@ -99,6 +46,7 @@ jreleaser {
     github {
       repoOwner.set("dremio")
       name.set("iceberg-auth-manager")
+      branch.set("main")
       tagName.set("authmgr-{{projectVersion}}")
       commitAuthor {
         name.set("AuthManager Release Workflow [bot]")
@@ -114,13 +62,23 @@ jreleaser {
         applyMilestone.set(Apply.ALWAYS)
       }
       changelog {
-        links.set(false)
+        links.set(true)
         skipMergeCommits.set(true)
         formatted.set(Active.ALWAYS)
-        preset.set( "gitmoji")
+        preset.set("conventional-commits")
+        format.set("- {{commitShortHash}} {{commitTitle}}")
         extraProperties.put("categorizeScopes", true)
+        category  {
+          key.set( "features")
+          labels.set(listOf("feat"))
+          title.set("🚀 Features")
+          format.set("- {{commitShortHash}} {{commitTitle}}{{#conventionalCommitBody}}\n  {{.}}{{/conventionalCommitBody}}")
+        }
+        contributors {
+          format.set("- {{contributorName}}{{#contributorUsernameAsLink}} ({{.}}){{/contributorUsernameAsLink}}")
+        }
         hide {
-          contributors.set(listOf("[bot]", "renovate-bot"))
+          contributors.set(listOf("[bot]", "renovate-bot", "GitHub"))
           categories.set(listOf("chore"))
         }
       }
@@ -131,10 +89,12 @@ jreleaser {
     maven {
       mavenCentral {
         create("sonatype")  {
-          active.set(Active. ALWAYS)
+          active.set(Active.ALWAYS)
           url.set("https://central.sonatype.com/api/v1/publisher")
           applyMavenCentralRules.set(true)
-          stagingRepositories.set(listOf(layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath))
+          subprojects.forEach { project ->
+            stagingRepository(project.layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath)
+          }
         }
       }
     }
