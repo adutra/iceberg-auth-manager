@@ -57,3 +57,4 @@ testcontainers-keycloak = { module = "com.github.dasniko:testcontainers-keycloak
 
 [plugins]
 rat = { id = "org.nosphere.apache.rat", version = "0.8.1" }
+jreleaser = { id = "org.jreleaser", version = "1.11.0" }

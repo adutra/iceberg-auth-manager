@@ -1,0 +1,86 @@
+##
+## Copyright (C) 2025 Dremio Corporation
+##
+## Licensed under the Apache License, Version 2.0 (the "License");
+## you may not use this file except in compliance with the License.
+## You may obtain a copy of the License at
+##
+##     http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+##
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Release version (e.g., 0.1.0)'
+        required: true
+      nextVersion:
+        description: 'Next development version (e.g., 0.1.1-SNAPSHOT)'
+        required: true
+
+# Required permissions for pushing to main branch and creating tags
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    # Only run in the original repository, not forks
+    # TODO change this
+    if: github.repository == 'adutra/iceberg-auth-manager'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0 # Fetch all history for all branches and tags
+      
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "authmgr-release-workflow-noreply@dremio.com"
+          git config --global user.name "AuthManager Release Workflow [bot]"
+
+      - name: Update version for release
+        run: echo "${{ github.event.inputs.releaseVersion }}" > version.txt
+
+      - name: Build with Gradle
+        run: ./gradlew clean build publish --no-build-cache
+
+      - name: JReleaser Config
+        run: ./gradlew jreleaserConfig
+
+      - name: JReleaser Full Release
+        env:
+          JRELEASER_MAVENCENTRAL_STAGE: UPLOAD
+          JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JRELEASER_MAVENCENTRAL_USERNAME: ${{ secrets.DEVBOT_CENTRAL_USERNAME }}
+          JRELEASER_MAVENCENTRAL_PASSWORD: ${{ secrets.DEVBOT_CENTRAL_PASSWORD }}
+          JRELEASER_GPG_PASSPHRASE: ${{ secrets.DEVBOT_GPG_PASSPHRASE }}
+          JRELEASER_GPG_SECRET_KEY: ${{ secrets.DEVBOT_GPG_PRIVATE_KEY }}
+        run: ./gradlew jreleaserFullRelease
+
+      - name: Update to next development version
+        run: |
+          echo "${{ github.event.inputs.nextVersion }}" > version.txt
+          git add version.txt
+          git commit -m "Prepare for next development version ${{ github.event.inputs.nextVersion }}"
+
+      - name: Push changes
+        run: |
+          git push origin main
+          git push origin v${{ github.event.inputs.releaseVersion }}
