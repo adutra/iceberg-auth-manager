@@ -61,9 +61,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean publish --no-build-cache
 
-      - name: JReleaser Config
-        run: ./gradlew jreleaserConfig
-
       - name: JReleaser Full Release
         env:
           JRELEASER_MAVENCENTRAL_STAGE: UPLOAD
@@ -72,7 +69,7 @@ jobs:
           JRELEASER_MAVENCENTRAL_PASSWORD: ${{ secrets.DEVBOT_CENTRAL_PASSWORD }}
           JRELEASER_GPG_PASSPHRASE: ${{ secrets.DEVBOT_GPG_PASSPHRASE }}
           JRELEASER_GPG_SECRET_KEY: ${{ secrets.DEVBOT_GPG_PRIVATE_KEY }}
-        run: ./gradlew jreleaserFullRelease
+        run: ./gradlew jreleaserConfig jreleaserFullRelease
 
       - name: Update to next development version
         run: |
