@@ -50,6 +50,11 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Configure Git
+        run: |
+          git config --global user.email "authmgr-release-workflow-noreply@dremio.com"
+          git config --global user.name "AuthManager Release Workflow [bot]"
+
       - name: Update version for release
         run: echo "${{ github.event.inputs.releaseVersion }}" > version.txt
 
