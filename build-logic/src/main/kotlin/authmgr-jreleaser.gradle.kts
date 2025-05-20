@@ -146,6 +146,14 @@ jreleaser {
     }
   }
 
+  files {
+    subprojects.forEach { project ->
+      glob {
+        pattern.set(project.layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath + "/**")
+      }
+    }
+  }
+
   deploy {
     maven {
       mavenCentral {
