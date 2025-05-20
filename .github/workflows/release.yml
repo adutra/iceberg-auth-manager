@@ -25,7 +25,7 @@ on:
         description: 'Next development version (e.g., 0.1.1-SNAPSHOT)'
         required: true
 
-# Required permissions for pushing to main branch and creating tags
+# Required permissions for pushing to main branch and creating tags and discussions
 permissions:
   contents: write
   packages: write

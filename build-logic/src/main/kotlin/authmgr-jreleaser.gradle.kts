@@ -140,25 +140,12 @@ jreleaser {
           ## Try It Out
           {{projectNameCapitalized}} is available as a Maven artifact from [Maven Central](https://central.sonatype.com/namespace/com.dremio.iceberg.authmgr).
           You can also download the latest version from the [GitHub Releases page]({{repoUrl}}/releases).
-          ## What's Changed
-          {{changelogChanges}}
+          ## Highlights
           The full changelog can be found [here]({{repoUrl}}/compare/{{previousTagName}}...{{tagName}}).
+          {{changelogChanges}}
           {{changelogContributors}}
           """.trimIndent()
         )
-        format.set(
-          """
-          <li>{{#conventionalCommitIsBreakingChange}}🚨{{/conventionalCommitIsBreakingChange}} {{#f_capitalize}}{{conventionalCommitScope}}{{/f_capitalize}}:
-          <a href="{{commitsUrl}}/{{commitFullHash}}">{{conventionalCommitDescription}}</a> ({{commitAuthor}})
-          {{#conventionalCommitBody}}
-          <blockquote>
-          {{#conventionalCommitBreakingChangeContent}}
-          {{#f_md2html}}<strong>{{.}}</strong>{{/f_md2html}}
-          {{/conventionalCommitBreakingChangeContent}}
-          {{#f_md2html}}{{.}}{{/f_md2html}}
-          </blockquote>
-          {{/conventionalCommitBody}}
-          </li>""".trimIndent())
         contributors {
           format.set("- {{contributorName}}{{#contributorUsernameAsLink}} ({{.}}){{/contributorUsernameAsLink}}")
         }
