@@ -44,7 +44,7 @@ jobs:
 
       - name: Validate inputs
         run: |
-          if [[ "${{ github.event.inputs.releaseVersion }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ "${{ github.event.inputs.releaseVersion }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-z]+[0-9]*)?$ ]]; then
             echo "Valid release version: ${{ github.event.inputs.releaseVersion }}"
           else
             echo "Invalid release version format. Expected format: x.y.z"
@@ -96,7 +96,7 @@ jobs:
           java-version: 21
 
       - name: Build with Gradle
-        run: ./gradlew clean publish --no-build-cache
+        run: ./gradlew clean test publish assemble -x intTest --no-build-cache
 
       - name: JReleaser full release
         env:
