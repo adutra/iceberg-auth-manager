@@ -151,7 +151,7 @@ jreleaser {
         }
         hide {
           categories.set(listOf("test", "tasks", "build", "docs"))
-          contributors.set(listOf("AuthManager Release Workflow [bot]", "[bot]", "regex:\\[bot\\]", "regex:.*bot.*"))
+          contributors.set(listOf("[bot]", "renovate-bot"))
         }
       }
     }
