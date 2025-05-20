@@ -32,7 +32,7 @@ permissions:
 
 jobs:
   release:
-    name: Release {{ github.event.inputs.releaseVersion }}
+    name: Release ${{ inputs.releaseVersion }}
 
     # Only run in the original repository, not forks
     # TODO change this
