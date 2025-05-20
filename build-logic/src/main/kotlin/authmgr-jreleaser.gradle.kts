@@ -15,7 +15,6 @@
  */
 
 import org.jreleaser.model.Active
-import org.jreleaser.model.api.common.Apply
 import org.jreleaser.model.api.deploy.maven.MavenCentralMavenDeployer
 import java.time.LocalDate
 
@@ -120,9 +119,6 @@ jreleaser {
 //        comment.set( "🎉 This issue has been resolved in `{{tagName}}` ([Release Notes]({{releaseNotesUrl}}))")
 //        applyMilestone.set(Apply.ALWAYS)
 //      }
-      update {
-        enabled.set(true)
-      }
       changelog {
         links.set(true)
         skipMergeCommits.set(true)
@@ -150,7 +146,7 @@ jreleaser {
   files {
     subprojects.forEach { project ->
       glob {
-        pattern.set(project.layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath + "/**")
+        pattern.set(project.layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath + "/**.jar")
       }
     }
   }
