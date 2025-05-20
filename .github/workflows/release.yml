@@ -32,6 +32,8 @@ permissions:
 
 jobs:
   release:
+    name: Release {{ github.event.inputs.releaseVersion }}
+
     # Only run in the original repository, not forks
     # TODO change this
     if: github.repository == 'adutra/iceberg-auth-manager'
