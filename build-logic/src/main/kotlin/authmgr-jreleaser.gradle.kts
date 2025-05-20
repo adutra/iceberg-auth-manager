@@ -27,6 +27,7 @@ jreleaser {
   gitRootSearch.set(true)
 
   project {
+    name.set("Dremio Iceberg AuthManager")
     description.set("Dremio AuthManager for Apache Iceberg")
     authors.set(listOf("Dremio"))
     license.set("Apache-2.0")
@@ -37,6 +38,14 @@ jreleaser {
     inceptionYear = "2025"
     vendor = "Dremio"
     copyright = "Copyright (c) ${LocalDate.now().year} Dremio"
+  }
+
+  files {
+    subprojects.forEach { project ->
+      glob {
+        pattern.set(project.layout.buildDirectory.dir("libs").get().asFile.absolutePath + "/**.jar")
+      }
+    }
   }
 
   signing {
@@ -99,24 +108,24 @@ jreleaser {
 
   release {
     github {
-      releaseName.set("Dremio Iceberg AuthManager {{projectVersionNumber}}")
+      releaseName.set("{{projectNameCapitalized}} {{projectVersionNumber}}")
       repoOwner.set("adutra") //FIXME: change to dremio
       name.set("iceberg-auth-manager")
       branch.set("main")
       skipTag.set(true)
       tagName.set("authmgr-{{projectVersion}}")
       commitAuthor {
-        name.set("AuthManager Release Workflow [bot]")
+        name.set("{{projectNameCapitalized}} Release Workflow [bot]")
         email.set("authmgr-release-workflow-noreply@dremio.com")
       }
       milestone {
         close.set(true)
-        name.set("{{tagName}}")
+        name.set("{{projectVersionNumber}}")
       }
       // FIXME enable
 //      issues {
 //        enabled.set(true)
-//        comment.set( "🎉 This issue has been resolved in `{{tagName}}` ([Release Notes]({{releaseNotesUrl}}))")
+//        comment.set("🎉 This issue has been resolved in version {{projectVersionNumber}} ([Release Notes]({{releaseNotesUrl}}))")
 //        applyMilestone.set(Apply.ALWAYS)
 //      }
       changelog {
@@ -125,6 +134,19 @@ jreleaser {
         formatted.set(Active.ALWAYS)
         preset.set("conventional-commits")
         extraProperties.put("categorizeScopes", true)
+        categoryTitleFormat.set("### {{categoryTitle}}")
+        content.set(
+          """
+          ## Try It Out
+          {{projectNameCapitalized}} is available as a Maven artifact from 
+          [Maven Central](https://central.sonatype.com/namespace/com.dremio.iceberg.authmgr).
+          You can also download the latest version from the 
+          [GitHub Releases page](https://github.com/dremio/iceberg-auth-manager/releases).
+          ## What's Changed
+          {{changelogChanges}}
+          {{changelogContributors}}
+          """.trimIndent()
+        )
         category  {
           key.set("features")
           labels.set(listOf("feat"))
@@ -143,14 +165,6 @@ jreleaser {
     }
   }
 
-  files {
-    subprojects.forEach { project ->
-      glob {
-        pattern.set(project.layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath + "/**.jar")
-      }
-    }
-  }
-
   deploy {
     maven {
       mavenCentral {
@@ -164,6 +178,27 @@ jreleaser {
           }
         }
       }
+    }
+  }
+
+  announce {
+    discussions {
+      active.set(Active.ALWAYS)
+      organization.set("adutra") //FIXME: change to dremio
+      team.set("maintainers")
+      title.set("🚀 {{projectNameCapitalized}} {{projectVersion}} released!")
+      message.set(
+          """
+          We are pleased to announce that {{projectNameCapitalized}} {{projectVersion}} has just been released!
+          Check the [Release Notes]({{releaseNotesUrl}}) for more details.
+          
+          We look forward to your feedback and hope you enjoy the new features and improvements.
+          If you have any questions or need assistance, please don't hesitate to [reach out]({{issueTrackerUrl}}).          
+          
+          Thank you,
+          
+          The {{projectNameCapitalized}} Team
+          """.trimIndent())
     }
   }
 }
