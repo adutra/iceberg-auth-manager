@@ -100,7 +100,8 @@ jreleaser {
 
   release {
     github {
-      repoOwner.set("adutra")
+      releaseName.set("Dremio Iceberg AuthManager {{projectVersionNumber}")
+      repoOwner.set("adutra") //FIXME: change to dremio
       name.set("iceberg-auth-manager")
       branch.set("main")
       tagName.set("authmgr-{{projectVersion}}")
@@ -112,6 +113,7 @@ jreleaser {
         close.set(true)
         name.set("{{tagName}}")
       }
+      // FIXME enable
 //      issues {
 //        enabled.set(true)
 //        comment.set( "🎉 This issue has been resolved in `{{tagName}}` ([Release Notes]({{releaseNotesUrl}}))")
@@ -124,11 +126,6 @@ jreleaser {
         links.set(true)
         skipMergeCommits.set(true)
         formatted.set(Active.ALWAYS)
-        content.set("""
-        # Dremio Iceberg AuthManager {{projectVersionNumber}}
-        {{changelogChanges}}
-        {{changelogContributors}}
-        """.trimIndent())
         preset.set("conventional-commits")
         extraProperties.put("categorizeScopes", true)
         category  {
