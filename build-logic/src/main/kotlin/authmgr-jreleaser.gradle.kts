@@ -104,6 +104,7 @@ jreleaser {
       repoOwner.set("adutra") //FIXME: change to dremio
       name.set("iceberg-auth-manager")
       branch.set("main")
+      skipTag.set(true)
       tagName.set("authmgr-{{projectVersion}}")
       commitAuthor {
         name.set("AuthManager Release Workflow [bot]")
