@@ -128,12 +128,12 @@ jreleaser {
 //        comment.set("🎉 This issue has been resolved in version {{projectVersionNumber}} ([Release Notes]({{releaseNotesUrl}}))")
 //        applyMilestone.set(Apply.ALWAYS)
 //      }
+      discussionCategoryName.set("Announcements")
       changelog {
         links.set(true)
         skipMergeCommits.set(true)
         formatted.set(Active.ALWAYS)
         preset.set("conventional-commits")
-        extraProperties.put("categorizeScopes", true)
         categoryTitleFormat.set("### {{categoryTitle}}")
         content.set(
           """
@@ -179,24 +179,25 @@ jreleaser {
     }
   }
 
-  announce {
-    discussions {
-      active.set(Active.RELEASE_PRERELEASE)
-      organization.set("adutra") //FIXME: change to dremio
-      team.set("adutra") //FIXME: change to maintainers
-      title.set("🚀 {{projectNameCapitalized}} {{projectVersion}} released!")
-      message.set(
-          """
-          We are pleased to announce that {{projectNameCapitalized}} {{projectVersion}} has just been released!
-          Check the [Release Notes]({{releaseNotesUrl}}) for more details.
-          
-          We look forward to your feedback and hope you enjoy the new features and improvements.
-          If you have any questions or need assistance, please don't hesitate to [reach out]({{issueTrackerUrl}}).          
-          
-          Thank you,
-          
-          The {{projectNameCapitalized}} Team
-          """.trimIndent())
-    }
-  }
+  // FIXME enable, requires an organization repo
+//  announce {
+//    discussions {
+//      active.set(Active.RELEASE_PRERELEASE)
+//      organization.set("dremio")
+//      team.set("maintainers")
+//      title.set("🚀 {{projectNameCapitalized}} {{projectVersion}} released!")
+//      message.set(
+//          """
+//          We are pleased to announce that {{projectNameCapitalized}} {{projectVersion}} has just been released!
+//          Check the [Release Notes]({{releaseNotesUrl}}) for more details.
+//
+//          We look forward to your feedback and hope you enjoy the new features and improvements.
+//          If you have any questions or need assistance, please don't hesitate to [start a discussion](https://github.com/dremio/iceberg-auth-manager) or [open an issue]({{issueTrackerUrl}}).
+//
+//          Thank you,
+//
+//          The {{projectNameCapitalized}} Team
+//          """.trimIndent())
+//    }
+//  }
 }
