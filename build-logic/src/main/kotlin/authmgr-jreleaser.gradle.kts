@@ -104,20 +104,22 @@ jreleaser {
       name.set("iceberg-auth-manager")
       branch.set("main")
       tagName.set("authmgr-{{projectVersion}}")
-      overwrite.set(true)
       commitAuthor {
         name.set("AuthManager Release Workflow [bot]")
         email.set("authmgr-release-workflow-noreply@dremio.com")
       }
       milestone {
         close.set(true)
-        name.set( "{{tagName}}")
+        name.set("{{tagName}}")
       }
 //      issues {
 //        enabled.set(true)
 //        comment.set( "🎉 This issue has been resolved in `{{tagName}}` ([Release Notes]({{releaseNotesUrl}}))")
 //        applyMilestone.set(Apply.ALWAYS)
 //      }
+      update {
+        enabled.set(true)
+      }
       changelog {
         links.set(true)
         skipMergeCommits.set(true)
@@ -128,10 +130,9 @@ jreleaser {
         {{changelogContributors}}
         """.trimIndent())
         preset.set("conventional-commits")
-        format.set("- {{commitShortHash}} {{commitTitle}}")
         extraProperties.put("categorizeScopes", true)
         category  {
-          key.set( "features")
+          key.set("features")
           labels.set(listOf("feat"))
           title.set("🚀 New Features")
           order.set(10)
