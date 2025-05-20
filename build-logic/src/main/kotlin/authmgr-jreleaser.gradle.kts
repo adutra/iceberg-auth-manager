@@ -142,6 +142,7 @@ jreleaser {
           You can also download the latest version from the [GitHub Releases page](https://github.com/dremio/iceberg-auth-manager/releases).
           ## What's Changed
           {{changelogChanges}}
+          The full changelog can be found here: {{previousTagName}}...{{tagName}}
           {{changelogContributors}}
           """.trimIndent()
         )
