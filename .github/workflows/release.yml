@@ -113,6 +113,7 @@ jobs:
           git push origin
 
       - name: Print JReleaser information
+        if: always()
         run: |
           if [ -f build/jreleaser/output.properties ]; then
             echo "JReleaser output properties:"
