@@ -148,14 +148,12 @@ jreleaser {
         )
         format.set(
           """
-          <li>
-          {{#conventionalCommitIsBreakingChange}}🚨{{/conventionalCommitIsBreakingChange}}
-          {{#f_capitalize}}{{conventionalCommitScope}}{{/f_capitalize}}:
+          <li>{{#conventionalCommitIsBreakingChange}}🚨{{/conventionalCommitIsBreakingChange}} {{#f_capitalize}}{{conventionalCommitScope}}{{/f_capitalize}}:
           <a href="{{commitsUrl}}/{{commitFullHash}}">{{conventionalCommitDescription}}</a> ({{commitAuthor}})
           {{#conventionalCommitBody}}
           <blockquote>
           {{#conventionalCommitBreakingChangeContent}}
-          {{#f_md2html}}<strong>{{.}}<strong>{{/f_md2html}}
+          {{#f_md2html}}<strong>{{.}}</strong>{{/f_md2html}}
           {{/conventionalCommitBreakingChangeContent}}
           {{#f_md2html}}{{.}}{{/f_md2html}}
           </blockquote>
