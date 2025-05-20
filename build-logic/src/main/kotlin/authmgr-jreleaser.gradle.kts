@@ -142,17 +142,31 @@ jreleaser {
           You can also download the latest version from the [GitHub Releases page]({{repoUrl}}/releases).
           ## What's Changed
           {{changelogChanges}}
-          The full changelog can be found here: {{repoUrl}}/compare/{{previousTagName}}...{{tagName}}
+          The full changelog can be found [here]({{repoUrl}}/compare/{{previousTagName}}...{{tagName}}).
           {{changelogContributors}}
           """.trimIndent()
         )
-        format.set("- {{commitShortHash}} {{commitTitle}}{{#conventionalCommitBody}}<br>{{.}}{{/conventionalCommitBody}}")
+        format.set(
+          """
+          <li>
+          {{#conventionalCommitIsBreakingChange}}🚨{{/conventionalCommitIsBreakingChange}}
+          {{#f_capitalize}}{{conventionalCommitScope}}{{/f_capitalize}}:
+          <a href="{{commitsUrl}}/{{commitFullHash}}">{{conventionalCommitDescription}}</a> ({{commitAuthor}})
+          {{#conventionalCommitBody}}
+          <blockquote>
+          {{#conventionalCommitBreakingChangeContent}}
+          {{#f_md2html}}<strong>{{.}}<strong>{{/f_md2html}}
+          {{/conventionalCommitBreakingChangeContent}}
+          {{#f_md2html}}{{.}}{{/f_md2html}}
+          </blockquote>
+          {{/conventionalCommitBody}}
+          </li>""".trimIndent())
         contributors {
           format.set("- {{contributorName}}{{#contributorUsernameAsLink}} ({{.}}){{/contributorUsernameAsLink}}")
         }
         hide {
           categories.set(listOf("test", "tasks", "build", "docs"))
-          contributors.set(listOf("[bot]", "renovate-bot", "GitHub"))
+          contributors.set(listOf("AuthManager Release Workflow [bot]", "[bot]", "regex:\\[bot\\]", "regex:.*bot.*"))
         }
       }
     }
