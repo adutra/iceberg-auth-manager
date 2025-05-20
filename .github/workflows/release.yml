@@ -32,7 +32,7 @@ permissions:
 
 jobs:
   release:
-    name: Release ${{ inputs.releaseVersion }}
+    name: Release version ${{ inputs.releaseVersion }}
 
     # Only run in the original repository, not forks
     # TODO change this
