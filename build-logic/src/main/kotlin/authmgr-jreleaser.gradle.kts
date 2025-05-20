@@ -146,18 +146,12 @@ jreleaser {
           {{changelogContributors}}
           """.trimIndent()
         )
-        category  {
-          key.set("features")
-          labels.set(listOf("feat"))
-          title.set("🚀 New Features")
-          order.set(10)
-          format.set("- {{commitShortHash}} {{commitTitle}}{{#conventionalCommitBody}}<br>{{.}}{{/conventionalCommitBody}}")
-        }
+        format.set("- {{commitShortHash}} {{commitTitle}}{{#conventionalCommitBody}}<br>{{.}}{{/conventionalCommitBody}}")
         contributors {
           format.set("- {{contributorName}}{{#contributorUsernameAsLink}} ({{.}}){{/contributorUsernameAsLink}}")
         }
         hide {
-          categories.set(listOf("chore", "build", "tasks", "docs"))
+          categories.set(listOf("test", "tasks", "build", "docs"))
           contributors.set(listOf("[bot]", "renovate-bot", "GitHub"))
         }
       }
