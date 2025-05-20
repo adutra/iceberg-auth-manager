@@ -139,10 +139,10 @@ jreleaser {
           """
           ## Try It Out
           {{projectNameCapitalized}} is available as a Maven artifact from [Maven Central](https://central.sonatype.com/namespace/com.dremio.iceberg.authmgr).
-          You can also download the latest version from the [GitHub Releases page](https://github.com/dremio/iceberg-auth-manager/releases).
+          You can also download the latest version from the [GitHub Releases page]({{repoUrl}}/releases).
           ## What's Changed
           {{changelogChanges}}
-          The full changelog can be found here: {{previousTagName}}...{{tagName}}
+          The full changelog can be found here: {{repoUrl}}/compare/{{previousTagName}}...{{tagName}}
           {{changelogContributors}}
           """.trimIndent()
         )
@@ -193,7 +193,7 @@ jreleaser {
 //          Check the [Release Notes]({{releaseNotesUrl}}) for more details.
 //
 //          We look forward to your feedback and hope you enjoy the new features and improvements.
-//          If you have any questions or need assistance, please don't hesitate to [start a discussion](https://github.com/dremio/iceberg-auth-manager) or [open an issue]({{issueTrackerUrl}}).
+//          If you have any questions or need assistance, please don't hesitate to [start a discussion]({{repoUrl}}/discussions) or [open an issue]({{issueTrackerUrl}}).
 //
 //          Thank you,
 //
