@@ -16,6 +16,7 @@
 
 import org.jreleaser.model.Active
 import org.jreleaser.model.api.common.Apply
+import org.jreleaser.model.api.deploy.maven.MavenCentralMavenDeployer
 import java.time.LocalDate
 
 plugins {
@@ -25,9 +26,6 @@ plugins {
 jreleaser {
 
   gitRootSearch.set(true)
-
-  // FIXME remove
-  dryrun.set(true)
 
   project {
     description.set("Dremio AuthManager for Apache Iceberg")
@@ -153,6 +151,7 @@ jreleaser {
     maven {
       mavenCentral {
         create("sonatype")  {
+          stage.set(MavenCentralMavenDeployer.Stage.UPLOAD)
           active.set(Active.ALWAYS)
           url.set("https://central.sonatype.com/api/v1/publisher")
           applyMavenCentralRules.set(true)
