@@ -100,7 +100,7 @@ jreleaser {
 
   release {
     github {
-      repoOwner.set("dremio")
+      repoOwner.set("adutra")
       name.set("iceberg-auth-manager")
       branch.set("main")
       tagName.set("authmgr-{{projectVersion}}")
