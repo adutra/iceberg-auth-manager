@@ -72,14 +72,14 @@ jobs:
           git config --global user.email "authmgr-release-workflow-noreply@dremio.com"
           git config --global user.name "AuthManager Release Workflow [bot]"
 
-      - name: Build with Gradle
-        run: ./gradlew clean publish --no-build-cache
-
       - name: Update version for release
         run: |
           echo "${{ github.event.inputs.releaseVersion }}" > version.txt
           git add version.txt
           git commit -a -m "chore(release): set release version to ${{ github.event.inputs.releaseVersion }}"
+
+      - name: Build with Gradle
+        run: ./gradlew clean publish --no-build-cache
 
       - name: JReleaser full release
         env:
