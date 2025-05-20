@@ -104,6 +104,7 @@ jreleaser {
       name.set("iceberg-auth-manager")
       branch.set("main")
       tagName.set("authmgr-{{projectVersion}}")
+      overwrite.set(true)
       commitAuthor {
         name.set("AuthManager Release Workflow [bot]")
         email.set("authmgr-release-workflow-noreply@dremio.com")
