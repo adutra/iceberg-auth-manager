@@ -138,10 +138,8 @@ jreleaser {
         content.set(
           """
           ## Try It Out
-          {{projectNameCapitalized}} is available as a Maven artifact from 
-          [Maven Central](https://central.sonatype.com/namespace/com.dremio.iceberg.authmgr).
-          You can also download the latest version from the 
-          [GitHub Releases page](https://github.com/dremio/iceberg-auth-manager/releases).
+          {{projectNameCapitalized}} is available as a Maven artifact from [Maven Central](https://central.sonatype.com/namespace/com.dremio.iceberg.authmgr).
+          You can also download the latest version from the [GitHub Releases page](https://github.com/dremio/iceberg-auth-manager/releases).
           ## What's Changed
           {{changelogChanges}}
           {{changelogContributors}}
@@ -170,7 +168,7 @@ jreleaser {
       mavenCentral {
         create("sonatype")  {
           stage.set(MavenCentralMavenDeployer.Stage.UPLOAD)
-          active.set(Active.ALWAYS)
+          active.set(Active.RELEASE_PRERELEASE)
           url.set("https://central.sonatype.com/api/v1/publisher")
           applyMavenCentralRules.set(true)
           subprojects.forEach { project ->
@@ -183,9 +181,9 @@ jreleaser {
 
   announce {
     discussions {
-      active.set(Active.ALWAYS)
+      active.set(Active.RELEASE_PRERELEASE)
       organization.set("adutra") //FIXME: change to dremio
-      team.set("maintainers")
+      team.set("adutra") //FIXME: change to maintainers
       title.set("🚀 {{projectNameCapitalized}} {{projectVersion}} released!")
       message.set(
           """
