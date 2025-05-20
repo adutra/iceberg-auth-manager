@@ -106,17 +106,17 @@ jreleaser {
       tagName.set("authmgr-{{projectVersion}}")
       commitAuthor {
         name.set("AuthManager Release Workflow [bot]")
-        email .set("authmgr-release-workflow-noreply@dremio.com")
+        email.set("authmgr-release-workflow-noreply@dremio.com")
       }
       milestone {
         close.set(true)
         name.set( "{{tagName}}")
       }
-      issues {
-        enabled.set(true)
-        comment.set( "🎉 This issue has been resolved in `{{tagName}}` ([Release Notes]({{releaseNotesUrl}}))")
-        applyMilestone.set(Apply.ALWAYS)
-      }
+//      issues {
+//        enabled.set(true)
+//        comment.set( "🎉 This issue has been resolved in `{{tagName}}` ([Release Notes]({{releaseNotesUrl}}))")
+//        applyMilestone.set(Apply.ALWAYS)
+//      }
       changelog {
         links.set(true)
         skipMergeCommits.set(true)
