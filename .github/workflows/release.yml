@@ -39,7 +39,7 @@ jobs:
     
     steps:
 
-      - name: Validate Inputs
+      - name: Validate inputs
         run: |
           if [[ "${{ github.event.inputs.releaseVersion }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "Valid release version: ${{ github.event.inputs.releaseVersion }}"
@@ -72,13 +72,16 @@ jobs:
           git config --global user.email "authmgr-release-workflow-noreply@dremio.com"
           git config --global user.name "AuthManager Release Workflow [bot]"
 
-      - name: Update version for release
-        run: echo "${{ github.event.inputs.releaseVersion }}" > version.txt
-
       - name: Build with Gradle
         run: ./gradlew clean publish --no-build-cache
 
-      - name: JReleaser Full Release
+      - name: Update version for release
+        run: |
+          echo "${{ github.event.inputs.releaseVersion }}" > version.txt
+          git add version.txt
+          git commit -a -m "chore(release): set release version to ${{ github.event.inputs.releaseVersion }}"
+
+      - name: JReleaser full release
         env:
           JRELEASER_MAVENCENTRAL_STAGE: UPLOAD
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -92,9 +95,8 @@ jobs:
         run: |
           echo "${{ github.event.inputs.nextVersion }}" > version.txt
           git add version.txt
-          git commit -m "Prepare for next development version ${{ github.event.inputs.nextVersion }}"
+          git commit -m "chore(release): set next development version to ${{ github.event.inputs.nextVersion }}"
 
       - name: Push changes
         run: |
-          git push origin main
-          git push origin v${{ github.event.inputs.releaseVersion }}
+          git push origin main --tags
