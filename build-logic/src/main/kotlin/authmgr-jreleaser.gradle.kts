@@ -100,7 +100,7 @@ jreleaser {
 
   release {
     github {
-      releaseName.set("Dremio Iceberg AuthManager {{projectVersionNumber}")
+      releaseName.set("Dremio Iceberg AuthManager {{projectVersionNumber}}")
       repoOwner.set("adutra") //FIXME: change to dremio
       name.set("iceberg-auth-manager")
       branch.set("main")
