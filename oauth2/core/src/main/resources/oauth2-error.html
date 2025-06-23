@@ -1,0 +1,194 @@
+<!--
+  ~ Copyright (C) 2025 Dremio Corporation
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication Failed</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: sans-serif;
+      background: linear-gradient(135deg, #fb9090 0%, #f5577c 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+    }
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      padding: 3rem 2rem;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      animation: slideUp 0.5s ease-out;
+    }
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    h1 {
+      color: #1f2937;
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    p {
+      color: #6e6e6e;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    .error-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: #ef4444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: shake 0.5s ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+      }
+      20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+      }
+    }
+    .x-mark {
+      width: 40px;
+      height: 40px;
+      position: relative;
+    }
+    .x-mark::before,
+    .x-mark::after {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 4px;
+      background: white;
+      border-radius: 2px;
+      top: 50%;
+      left: 50%;
+    }
+    .x-mark::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .x-mark::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+    .error-details {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+    .error-details-title {
+      color: #dc2626;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    .error-details-content {
+      color: #7f1d1d;
+      font-size: 0.9rem;
+      font-family: monospace;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+    .instructions {
+      font-weight: bold;
+      font-size: 0.95rem;
+      background: #f3f4f6;
+      border-radius: 8px;
+      padding: 1rem;
+      color: #4b5563;
+      border-left: 4px solid #ef4444;
+    }
+    .instructions li {
+      margin-bottom: 0.5rem;
+    }
+    .instructions ul {
+      text-align: left;
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 2rem 1.5rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .error-icon {
+        width: 60px;
+        height: 60px;
+      }
+      .x-mark {
+        width: 30px;
+        height: 30px;
+      }
+      .x-mark::before,
+      .x-mark::after {
+        width: 30px;
+        height: 3px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="error-icon">
+    <div class="x-mark"></div>
+  </div>
+  <h1>Authentication Failed</h1>
+  <p>The agent "{{agentName}}" could not authenticate.</p>
+  <div class="error-details">
+    <div class="error-details-title">Error Details:</div>
+    <div class="error-details-content">{{errorMessage}}</div>
+  </div>
+  <div class="instructions">
+    <ul>
+      <li>Close this browser tab and try the authentication process again.</li>
+      <li>If the problem persists, contact your system administrator.</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

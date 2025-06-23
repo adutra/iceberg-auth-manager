@@ -22,7 +22,6 @@ import com.dremio.iceberg.authmgr.oauth2.config.AuthorizationCodeConfig;
 import com.dremio.iceberg.authmgr.oauth2.config.ConfigUtils;
 import com.dremio.iceberg.authmgr.oauth2.config.HttpConfig;
 import com.dremio.iceberg.authmgr.tools.immutables.AuthManagerImmutable;
-import com.google.errorprone.annotations.FormatMethod;
 import com.nimbusds.oauth2.sdk.AuthorizationCode;
 import com.nimbusds.oauth2.sdk.AuthorizationCodeGrant;
 import com.nimbusds.oauth2.sdk.AuthorizationRequest;
@@ -39,6 +38,7 @@ import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsParameters;
 import com.sun.net.httpserver.HttpsServer;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
@@ -67,10 +67,8 @@ abstract class AuthorizationCodeFlow extends AbstractFlow {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthorizationCodeFlow.class);
 
-  private static final String HTML_TEMPLATE_OK =
-      "<html><body><h1>Authentication successful</h1><p>You can close this page now.</p></body></html>";
-  private static final String HTML_TEMPLATE_FAILED =
-      "<html><body><h1>Authentication failed</h1><p>Could not obtain access token: %s</p></body></html>";
+  private static final String SUCCESS_TEMPLATE_PATH = "oauth2-success.html";
+  private static final String ERROR_TEMPLATE_PATH = "oauth2-error.html";
 
   interface Builder extends AbstractFlow.Builder<AuthorizationCodeFlow, Builder> {}
 
@@ -207,6 +205,16 @@ abstract class AuthorizationCodeFlow extends AbstractFlow {
     return new Phaser(1);
   }
 
+  @Value.Lazy
+  String getSuccessTemplate() {
+    return loadHtmlTemplate(SUCCESS_TEMPLATE_PATH);
+  }
+
+  @Value.Lazy
+  String getErrorTemplate() {
+    return loadHtmlTemplate(ERROR_TEMPLATE_PATH);
+  }
+
   private void stopServer() {
     // Wait for all in-flight requests to complete before proceeding
     // (note: this call is potentially blocking!)
@@ -261,9 +269,9 @@ abstract class AuthorizationCodeFlow extends AbstractFlow {
     }
     try {
       if (error == null) {
-        writeResponse(exchange, HTTP_OK, HTML_TEMPLATE_OK);
+        writeSuccessResponse(exchange);
       } else {
-        writeResponse(exchange, HTTP_UNAUTHORIZED, HTML_TEMPLATE_FAILED, error.toString());
+        writeErrorResponse(exchange, error.toString());
       }
     } catch (IOException e) {
       LOGGER.debug("[{}] Authorization Code Flow: error writing response", getAgentName(), e);
@@ -379,12 +387,33 @@ abstract class AuthorizationCodeFlow extends AbstractFlow {
     params.setSSLParameters(sslParameters);
   }
 
-  @FormatMethod
-  private static void writeResponse(
-      HttpExchange exchange, int status, String htmlTemplate, Object... args) throws IOException {
-    String html = String.format(htmlTemplate, args);
+  private void writeSuccessResponse(HttpExchange exchange) throws IOException {
+    String html =
+        getSuccessTemplate().replace("{{agentName}}", getConfig().getSystemConfig().getAgentName());
     exchange.getResponseHeaders().add("Content-Type", "text/html");
-    exchange.sendResponseHeaders(status, html.length());
+    exchange.sendResponseHeaders(HTTP_OK, html.length());
     exchange.getResponseBody().write(html.getBytes(StandardCharsets.UTF_8));
+  }
+
+  private void writeErrorResponse(HttpExchange exchange, String errorMessage) throws IOException {
+    String html =
+        getErrorTemplate()
+            .replace("{{agentName}}", getConfig().getSystemConfig().getAgentName())
+            .replace("{{errorMessage}}", errorMessage);
+    exchange.getResponseHeaders().add("Content-Type", "text/html");
+    exchange.sendResponseHeaders(HTTP_UNAUTHORIZED, html.length());
+    exchange.getResponseBody().write(html.getBytes(StandardCharsets.UTF_8));
+  }
+
+  private static String loadHtmlTemplate(String templatePath) {
+    try (InputStream inputStream =
+        AuthorizationCodeFlow.class.getClassLoader().getResourceAsStream(templatePath)) {
+      if (inputStream == null) {
+        throw new RuntimeException("HTML template not found: " + templatePath);
+      }
+      return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to load HTML template: " + templatePath, e);
+    }
   }
 }

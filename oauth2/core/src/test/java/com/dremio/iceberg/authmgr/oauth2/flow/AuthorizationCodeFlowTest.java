@@ -24,6 +24,7 @@ import com.nimbusds.oauth2.sdk.GrantType;
 import com.nimbusds.oauth2.sdk.auth.ClientAuthenticationMethod;
 import com.nimbusds.oauth2.sdk.pkce.CodeChallengeMethod;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -83,5 +84,30 @@ class AuthorizationCodeFlowTest {
       TokensResult tokens = flow.fetchNewTokens().toCompletableFuture().get();
       assertTokensResult(tokens, "access_initial", "refresh_initial");
     }
+  }
+
+  @Test
+  void htmlTemplatesCanBeLoaded() throws Exception {
+    // Test that the HTML templates can be loaded from the classpath
+    Method getSuccessTemplate = AuthorizationCodeFlow.class.getDeclaredMethod("getSuccessTemplate");
+    getSuccessTemplate.setAccessible(true);
+    String successHtml = (String) getSuccessTemplate.invoke(null);
+
+    Method getErrorTemplate = AuthorizationCodeFlow.class.getDeclaredMethod("getErrorTemplate");
+    getErrorTemplate.setAccessible(true);
+    String errorHtml = (String) getErrorTemplate.invoke(null);
+
+    // Verify the templates contain expected content
+    assertThat(successHtml)
+        .isNotEmpty()
+        .contains("<!DOCTYPE html")
+        .contains("Authentication Successful")
+        .contains("You can safely close this browser tab now");
+
+    assertThat(errorHtml)
+        .isNotEmpty()
+        .contains("<!DOCTYPE html")
+        .contains("Authentication Failed")
+        .contains("%s"); // Should contain placeholder for error message
   }
 }
